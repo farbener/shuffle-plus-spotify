@@ -34,6 +34,8 @@ public final class ShufflePlus {
     private static volatile long lastStart = -DEBOUNCE_MILLIS;
     /** The queue is topped up when this many queued songs are left. */
     private static final int TOP_UP_AT = 20;
+    private static final int STATE_RETRIES = 5;
+    private static final long STATE_RETRY_MILLIS = 1000;
     private static final int LOADING_RETRIES = 3;
     private static final long LOADING_RETRY_MILLIS = 1000;
     /** Not a 64-bit generator, which can reach only a sliver of the orders of a list past 20 songs. */
@@ -128,6 +130,7 @@ public final class ShufflePlus {
         private final List<String> uris = new ArrayList<>();
         private String contextUri;
         private int retries;
+        private int stateWaits;
 
         Run(Context context, Random random) {
             this.context = context;
@@ -137,6 +140,12 @@ public final class ShufflePlus {
         void start() {
             Esperanto.PlayerState state = PlayerBridge.lastState();
             if (state == null || state.contextUri == null) {
+                // Right after start-up or sign-in the state may not have arrived yet: wait a few seconds for it.
+                if (stateWaits++ < STATE_RETRIES) {
+                    PlayerBridge.postDelayed(this::start, STATE_RETRY_MILLIS);
+                    return;
+                }
+                Log.i(TAG, state == null ? "No player state received" : "The player state has no context");
                 tell("Nothing is playing yet; start a playlist or album first");
                 return;
             }

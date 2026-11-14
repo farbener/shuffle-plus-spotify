@@ -34,7 +34,7 @@ public final class PlayerBridge {
     static final String NOT_CONNECTED = "bridge not connected";
     private static final String GET_STATE = "sp://esperanto/" + Esperanto.CONTEXT_PLAYER + "/GetState";
     private static final long FIRST_REOPEN_MILLIS = 1000;
-    private static final long LAST_REOPEN_MILLIS = 60_000;
+    private static final long LAST_REOPEN_MILLIS = 5_000; // short, so a press soon after sign-in finds a state
 
     /**
      * One daemon thread, parked while idle. {@link #post} is strictly first in, first out: on this
@@ -226,7 +226,7 @@ public final class PlayerBridge {
         }
     }
 
-    /** Called with {@link #LOCK} held: one reopen at a time, after the backoff, which then doubles up to a minute. */
+    /** Called with {@link #LOCK} held: one reopen at a time, after the backoff, which then doubles up to {@link #LAST_REOPEN_MILLIS}. */
     private static void reopenLater() {
         if (reopenDue) return;
         reopenDue = true;
@@ -235,7 +235,7 @@ public final class PlayerBridge {
         reopenMillis = nextBackoff(reopenMillis);
     }
 
-    /** The wait after one of {@code millis}: twice as long, up to a minute. */
+    /** The wait after one of {@code millis}: twice as long, up to {@link #LAST_REOPEN_MILLIS}. */
     static long nextBackoff(long millis) {
         return Math.min(millis * 2, LAST_REOPEN_MILLIS);
     }
