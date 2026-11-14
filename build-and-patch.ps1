@@ -16,7 +16,7 @@ $env:GITHUB_ACTOR = (gh api user -q .login)
 $env:GITHUB_TOKEN = (gh auth token) # read:packages, for the Morphe registry; never written to disk
 
 Push-Location $PSScriptRoot
-.\gradlew.bat :patches:build --no-daemon -q
+.\gradlew.bat buildAndroid --no-daemon -q
 Pop-Location
 
 $bundle = Get-ChildItem "$PSScriptRoot\patches\build\libs\patches-*.mpp" -Exclude "*-sources.mpp", "*-javadoc.mpp" |
