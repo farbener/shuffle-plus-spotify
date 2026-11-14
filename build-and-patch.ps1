@@ -19,7 +19,9 @@ Push-Location $PSScriptRoot
 .\gradlew.bat :patches:build --no-daemon -q
 Pop-Location
 
-$patchArgs = @("-p", "$PSScriptRoot\patches\build\libs\patches-1.0.0.mpp", "-e", "Shuffle+", "-O", "recentHours=$RecentHours")
+$bundle = Get-ChildItem "$PSScriptRoot\patches\build\libs\patches-*.mpp" -Exclude "*-sources.mpp", "*-javadoc.mpp" |
+    Sort-Object LastWriteTime | Select-Object -Last 1
+$patchArgs = @("-p", $bundle.FullName, "-e", "Shuffle+", "-O", "recentHours=$RecentHours")
 if ($TapShuffles) { $patchArgs += @("-O", "tapShuffles=true") }
 & "$Java\bin\java.exe" -jar $MorpheJar patch @patchArgs -o $Out -t "$PSScriptRoot\..\out\tmp" $Apkm
 if ($LASTEXITCODE -ne 0) { throw "Patching failed" }

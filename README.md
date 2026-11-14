@@ -20,7 +20,12 @@ Free accounts get a "Spotify refused" toast: Spotify only lets Premium choose th
 
 ## Target
 
-Spotify **9.1.94.1929**, arm64, APKM (version code 147600575). Any other build is refused.
+Spotify arm64 builds, as an APKM or XAPK bundle. Any other build is refused:
+
+| Version | Version code |
+|---|---|
+| **9.2.0.2053** | 148387875 |
+| 9.1.94.1929 | 147600575 |
 
 ## Build and patch
 
