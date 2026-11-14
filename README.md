@@ -27,6 +27,13 @@ Spotify arm64 builds, as an APKM or XAPK bundle. Any other build is refused:
 | **9.2.0.2053** | 148387875 |
 | 9.1.94.1929 | 147600575 |
 
+## Morphe Manager
+
+Add `github.com/farbener/shuffle-plus-spotify` under **Sources**, patch Spotify (supply the APKM or XAPK of a
+supported version), and the Manager flags new releases and re-patches in place. For updates over an existing
+install, import the keystore the earlier build was signed with (**Settings > Signing key**), or Android refuses
+the install. `patches-bundle.json` is the release metadata the Manager reads; the release workflow updates it.
+
 ## Build and patch
 
 ```powershell
