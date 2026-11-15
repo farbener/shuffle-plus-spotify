@@ -79,8 +79,8 @@ val shufflePlusPatch = bytecodePatch(
     val commandShuffles by booleanOption(
         key = "commandShuffles",
         default = false,
-        title = "Shuffle from car and headsets",
-        description = "Turning shuffle on from Android Auto, a headset or any other control runs Shuffle+ " +
+        title = "Shuffle from car screens and other controls",
+        description = "Turning shuffle on from Android Auto or any other control runs Shuffle+ " +
             "instead of Spotify's own shuffle.",
     )
 
@@ -133,7 +133,7 @@ val shufflePlusPatch = bytecodePatch(
                 .replaceInstruction(0, "const/4 v0, 0x1")
         }
 
-        // C1: the player's "set shuffle" sender, which every shuffle toggle passes (phone, headset, Android Auto).
+        // C1: the player's "set shuffle" sender, which every shuffle toggle passes (phone, Android Auto, other controls).
         // Only hooked when the option is on, so the default build is unchanged.
         if (commandShuffles == true) {
             val (sender, valueStore) = findShuffleSender()

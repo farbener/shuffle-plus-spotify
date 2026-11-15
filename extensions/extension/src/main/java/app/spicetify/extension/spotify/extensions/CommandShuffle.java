@@ -5,7 +5,7 @@ import android.util.Log;
 
 /**
  * Hook C1, in the place where Spotify's player sends a "set shuffle" command: every shuffle toggle that
- * reaches the player passes it, whether it came from the phone, a headset, or the Android Auto screen.
+ * reaches the player passes it, whether it came from the phone, the Android Auto screen, or another control.
  * With the patch's "commandShuffles" option on, turning shuffle on runs Shuffle+ instead, and the command
  * is sent as "off", so Spotify's own shuffle stays off.
  */
@@ -40,7 +40,7 @@ public final class CommandShuffle {
     private static final int SHUFFLING_CONTEXT = 3;
 
     /**
-     * Hook C2, at the start of Spotify's Esperanto sender: the shuffle button, a headset and the car all end
+     * Hook C2, at the start of Spotify's Esperanto sender: the shuffle button, the car and other controls all end
      * up as a ContextPlayer {@code SetOptions} request. One that turns shuffling on is sent as "off" and runs
      * Shuffle+ instead. Returns the request to send. Never throws into Spotify.
      */
